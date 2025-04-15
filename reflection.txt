@@ -1,0 +1,15 @@
+Initial Reflection:
+-------------------
+When I first received the Ayoayo game implementation task, I began by analyzing the rules of the game, breaking them into actionable components: board state, seed sowing logic, capturing, and endgame condition. I also identified that we need the modular design through classes like `Player` and `Ayoayo`.
+
+I chose Java for its object-oriented design and structure, which would help manage game entities in a clean way.
+
+Final Reflection:
+-----------------
+During implementation, I encountered challenges in modeling the sowing and capturing logic. Handling extra turns required carefully tracking the position where the last seed landed.
+
+Testing with the sample Main class helped verify edge cases like capturing and end-game logic.
+
+Key takeaways include the importance of maintaining modular code and understanding how game states evolve turn-by-turn.
+
+Overall, this assignment improved my grasp of modeling rule-based systems and writing clean, testable code.

@@ -31,8 +31,12 @@ public class Player {
     }
 
     public int getPit(int index) {
+        if (index < 0 || index >= pits.length) {
+            throw new IllegalArgumentException("Invalid pit index: " + index);
+        }
         return pits[index];
     }
+
 
     public void incrementPit(int index) {
         pits[index]++;

@@ -53,8 +53,9 @@ public class Ayoayo {
         Player opponent = playerIndex == 1 ? player2 : player1;
 
         int index = pitIndex - 1;
-        int seeds = current.getPit(index);
+        if (index < 0 || index >= 6) return "Invalid pit index";
 
+        int seeds = current.getPit(index);
         if (seeds == 0) return "Pit is empty";
 
         current.setPit(index, 0);
@@ -63,23 +64,22 @@ public class Ayoayo {
         boolean onCurrent = true;
 
         while (seeds > 0) {
-            // Sow in current side
+            // Sow on current player's side
             while (pos < 6 && seeds > 0) {
                 current.incrementPit(pos++);
                 seeds--;
             }
 
-            // Sow in store
+            // Sow into current player's store
             if (seeds > 0) {
                 current.addToStore(1);
                 seeds--;
                 if (seeds == 0) {
-                    // Extra turn
                     return "player " + playerIndex + " take another turn\n" + getBoardState();
                 }
             }
 
-            // Sow in opponent's side
+            // Switch to opponent's side
             pos = 0;
             onCurrent = false;
             while (pos < 6 && seeds > 0) {
@@ -87,24 +87,26 @@ public class Ayoayo {
                 seeds--;
             }
 
-            // Next round
+            // Prepare for next round
             onCurrent = true;
             pos = 0;
         }
 
-        // Capture Rule
-        pos--; // step back to last seed position
-        if (onCurrent && pos < 6 && current.getPit(pos) == 1) {
-            int oppositeIndex = 5 - pos;
-            int captured = opponent.getPit(oppositeIndex);
-            if (captured > 0) {
-                current.addToStore(captured + 1);
-                current.setPit(pos, 0);
-                opponent.setPit(oppositeIndex, 0);
+        // Capture logic
+        int lastPit = pos - 1;
+        if (onCurrent && lastPit >= 0 && lastPit < 6 && current.getPit(lastPit) == 1) {
+            int oppositeIndex = 5 - lastPit;
+            if (oppositeIndex >= 0 && oppositeIndex < 6) {
+                int captured = opponent.getPit(oppositeIndex);
+                if (captured > 0) {
+                    current.addToStore(captured + 1);
+                    current.setPit(lastPit, 0);
+                    opponent.setPit(oppositeIndex, 0);
+                }
             }
         }
 
-        // Check for end game
+        // Check for end of game
         if (player1.isEmpty() || player2.isEmpty()) {
             player1.collectRemainingSeeds();
             player2.collectRemainingSeeds();
